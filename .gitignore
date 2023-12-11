@@ -1,0 +1,8 @@
+target/
+
+*.lck
+*.log
+*.vscode
+.idea/
+.vscode/
+
