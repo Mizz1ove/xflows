@@ -34,7 +34,7 @@ abstract class Node implements Runnable {
         this(UUID.randomUUID().toString(), hasInputPort, outputPortCount);
     }
 
-    protected abstract void preprocess() throws MqttException;
+    protected abstract void preprocess();
     protected abstract void process();
     protected abstract void postprocess();
 
