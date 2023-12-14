@@ -1,11 +1,12 @@
 package com.nhnacademy.aiot.node;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MqttInTest {
     @Test
@@ -15,6 +16,17 @@ public class MqttInTest {
 
     @Test
     void testPreprocess() {
+        MqttIn mqttIn = new MqttIn("nodetype", false, 0, "mqttclientid", "#");
+
+        assertDoesNotThrow(() -> {mqttIn.preprocess();});
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        assertTrue(mqttIn.innerQueue.size() > 0);
 
     }
 
@@ -25,7 +37,7 @@ public class MqttInTest {
 
     @Test
     void testConstructor() {
-        MqttIn mqttIn = new MqttIn("nodetype", false, 0, "mqttclientid");
+        MqttIn mqttIn = new MqttIn("nodetype", false, 0, "mqttclientid", "application/#");
 
         assertNotNull(mqttIn.mqttClient);
     }
