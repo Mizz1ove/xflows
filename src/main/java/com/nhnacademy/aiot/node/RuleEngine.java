@@ -1,5 +1,6 @@
 package com.nhnacademy.aiot.node;
 
+import com.nhnacademy.aiot.Database;
 import com.nhnacademy.aiot.Msg;
 import com.nhnacademy.aiot.node.Node;
 
@@ -25,17 +26,23 @@ public class RuleEngine extends Node {
         Msg msg = inputPort.getMsg();
 
         // TODO db에 저장
-        Database.sensorDataMap.put(msg.getPayload().getSensorId(), msg.getPayload()); // 아닐수도
+        String deviceId = msg.getPayload().path("deviceId").asText();
+        double value = msg.getPayload().path("value").asDouble(); // TODO String 타입이 아닌가?
+        Database.sensorDataMap.get(deviceId).builder().value(value).build();
 
         // TODO MQTT outNode로 보내기
         out(msg);
 
         // TODO Modbus server register update
-        // TODO 무슨레지스터인지 체크해서 저장 하는거 .
+        // TODO 무슨레지스터인지 체크해서 저장 해야함 ..
         int[] register = modbusServer.getRegister();
         register[addr] = msg.getPayload().getData();
 
 
     }
 
+    @Override
+    protected void postprocess() {
+
+    }
 }

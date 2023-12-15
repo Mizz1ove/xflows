@@ -1,7 +1,9 @@
 package com.nhnacademy.aiot.node;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nhnacademy.aiot.Database;
 import com.nhnacademy.aiot.Msg;
+import com.nhnacademy.aiot.SensorData;
 
 public class ModbusMapper extends Node {
 
@@ -40,12 +42,10 @@ public class ModbusMapper extends Node {
         ObjectNode payload = msg.getPayload();
 
         payload.put("deviceId", sensorId);
-        payload.put("site", sensorData.get("site"));
-        payload.put("branch", sensorData.get("branch"));
-        payload.put("place", sensorData.get("place"));
+        payload.put("site", sensorData.getSite());
+        payload.put("branch", sensorData.getBranch());
+        payload.put("place", sensorData.getPlace());
         payload.put("value", payload.path("data") * ratio);
-
-        modifiedMsg.setPayload(payload);
 
         return msg;
     }
