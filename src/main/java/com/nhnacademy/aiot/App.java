@@ -5,9 +5,6 @@ import com.nhnacademy.aiot.node.MqttIn;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-/**
- * Hello world!
- */
 public final class App {
     private App() {
     }

@@ -21,7 +21,6 @@ public class MqttIn extends Node {
         this.mqttClient = FlowGenerator.clientMap.get(clientId);
         this.topicFilter = topicFilter;
         this.innerQueue = new LinkedList<>();
-//        this.objectMapper = new ObjectMapper();
     }
 
     @Override

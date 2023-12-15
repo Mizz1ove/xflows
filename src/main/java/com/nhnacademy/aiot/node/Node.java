@@ -34,9 +34,9 @@ abstract class Node implements Runnable {
         this(UUID.randomUUID().toString(), hasInputPort, outputPortCount);
     }
 
-    protected abstract void preprocess();
-    protected abstract void process();
-    protected abstract void postprocess();
+    protected void preprocess() {};
+    protected void process() {};
+    protected void postprocess() {};
 
     public void out(Message message) {
 
