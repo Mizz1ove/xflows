@@ -6,6 +6,10 @@ public class Port {
 
     private LinkedList<Wire> wireList;
 
+    public Port(){
+        this.wireList = new LinkedList<>();
+    }
+
     public void out(Message message) {
         if (message != null) {
             for (Wire wire : wireList) {
