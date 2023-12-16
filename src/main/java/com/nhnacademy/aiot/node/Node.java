@@ -57,12 +57,14 @@ public class Node implements Runnable {
     protected void out(Message outMessage) {
 
         outputPorts[0].out(outMessage);
+        sendMessageCount++;
     }
 
     protected void out(Message... outMessages) {
 
         for (int i = 0; i < outMessages.length; i++) {
             outputPorts[i].out(outMessages[i]);
+            sendMessageCount++;
         }
     }
 
@@ -76,7 +78,7 @@ public class Node implements Runnable {
         }
     }
 
-    public boolean MsgReceivedCount() {
+    public boolean MsgReceived() {
         // 메시지 수신 횟수 세는 로직
         if (inputPort.hasMessage()) {
             receivedMessageCount++;
