@@ -1,20 +1,20 @@
 package com.nhnacademy.aiot;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Port {
     private List<Wire> wires;
-    private Queue<Msg> messageQueue;
+    private Queue<Message> messageQueue;
 
     public Port() {
         this.wires = new ArrayList<>();
-        this.messageQueue = new LinkedList<>();
+        this.messageQueue = new ConcurrentLinkedQueue<>();
     }
 
-    public void bindWire(Wire wire) {
+    public void addWire(Wire wire) {
         wires.add(wire);
     }
 
@@ -26,7 +26,7 @@ public class Port {
         return wires;
     }
 
-    public void out(Msg outMessage) {
+    public void out(Message outMessage) {
         if (outMessage != null) {
             for (Wire wire : wires) {
                 wire.put(outMessage);
@@ -54,8 +54,7 @@ public class Port {
         }
     }
 
-    public Msg getMsg() {
-
+    public Message getMsg() {
         return messageQueue.poll();
     }
 }

@@ -1,7 +1,7 @@
 package com.nhnacademy.aiot.node;
 
 import com.nhnacademy.aiot.Database;
-import com.nhnacademy.aiot.Msg;
+import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.node.Node;
 
 public class RuleEngine extends Node {
@@ -23,7 +23,7 @@ public class RuleEngine extends Node {
         if (!inputPort.hasMessage())
             return;
 
-        Msg msg = inputPort.getMsg();
+        Message msg = inputPort.getMsg();
 
         // TODO db에 저장
         String deviceId = msg.getPayload().path("deviceId").asText();

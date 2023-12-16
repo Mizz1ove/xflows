@@ -1,94 +1,100 @@
 package com.nhnacademy.aiot.node;
 
 import com.nhnacademy.aiot.Message;
-import com.nhnacademy.aiot.Msg;
 import com.nhnacademy.aiot.Port;
 import com.nhnacademy.aiot.Wire;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import lombok.extern.log4j.Log4j2;
 
-import java.util.UUID;
+@Log4j2
+public class Node implements Runnable {
 
-abstract class Node implements Runnable {
-
-    Thread thread;
-    private final String id;
+    private Thread thread;
     protected Port inputPort;
     protected Port[] outputPorts;
     protected static int nodeCount;
+    protected String name;
+
+    protected int inCount = 0;
+    protected int outCount = 0;
+    protected int errCount = 0;
+
+    protected final String id;
+
 
     protected Node(String id, boolean hasInputPort, int outputPortCount) {
-        this.thread = new Thread(this);
         this.id = id;
+        if (hasInputPort) {
+            this.inputPort = new Port();
+        }
+
         this.outputPorts = new Port[outputPortCount];
+        name = getClass().getSimpleName() + "_" + nodeCount++;
+        log.info("create node : " + name);
 
         for (int i = 0; i < outputPortCount; i++) {
-
             outputPorts[i] = new Port();
         }
-
-        if (hasInputPort) inputPort = new Port();
-
     }
 
-    protected Node(boolean hasInputPort, int outputPortCount) {
-
-        this(UUID.randomUUID().toString(), hasInputPort, outputPortCount);
+    protected Node(String id, int outputPortCount) {
+        this(id, true, outputPortCount);
     }
 
-    protected abstract void preprocess();
-    protected abstract void process();
-    protected abstract void postprocess();
-
-    public void out(Msg message) {
-
-        outputPorts[0].out(message);
+    public void preprocess() {
+        log.info("start node : " + name);
     }
 
-    public void out(Msg... messages) {
+    public void process() {
+        // 이 메서드는 상속받는 하위 클래스에서 구현한다.
+    }
 
-        for (int i = 0; i < messages.length; i++) {
-            outputPorts[i].out(messages[i]);
+    public void postprocess() {
+        log.info(this.getClass().getSimpleName() + " - stop");
+    }
+
+    public void out(Message outMessage) {
+
+        outputPorts[0].out(outMessage);
+    }
+
+    public void out(Message... outMessages) {
+
+        for (int i = 0; i < outMessages.length; i++) {
+            outputPorts[i].out(outMessages[i]);
         }
-
     }
 
-    public void bindInputWire(Wire wire) {
-
-        inputPort.bindWire(wire);
+    public void setInputWire(Wire inputWire) {
+        inputPort.addWire(inputWire);
     }
 
-    public void bindOutputWire(Wire wire, int portIndex) {
+    public void setOutputWire(int portIdx, Wire outputWire) {
+        if (portIdx < outputPorts.length) {
+            outputPorts[portIdx].addWire(outputWire);
+        }
+    }
 
-        outputPorts[portIndex].bindWire(wire);
+
+    public synchronized void start() {
+        thread = new Thread(this, this.getClass().getSimpleName());
+        thread.start();
     }
 
     @Override
     public void run() {
-        try {
-            preprocess();
-            while (true) {
+        preprocess();
 
-                process();
-                Thread.sleep(1000);
-
+        while ((thread != null) && thread.isAlive()) {
+            process();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                if (thread != null) {
+                    thread.interrupt();
+                }
             }
-
-           // postprocess();
-
-        } catch (InterruptedException e) {
-
-            if (thread != null) thread.interrupt();
-            throw new RuntimeException(e);
         }
 
+        postprocess();
     }
-
-    public void start() {
-        thread.start();
-    }
-
-
-
-
 }
-

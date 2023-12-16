@@ -2,7 +2,6 @@ package com.nhnacademy.aiot;
 
 import java.util.UUID;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
@@ -13,7 +12,7 @@ public class Message {
     private String msgId;
     private JsonNode payload;
 
-        public Message(String topic, JsonNode payload) {
+    public Message(String topic, JsonNode payload) {
         this.topic = topic;
         this.payload = payload;
         this.createTime = System.currentTimeMillis();
@@ -40,18 +39,16 @@ public class Message {
     }
 
     public JsonNode getJSON() {
-        ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
-        jsonNode.put("topic", topic);
-        jsonNode.put("msgId", msgId);
-        jsonNode.set("payload", payload);
-        return jsonNode;
+
+        return JSONUtils.parseJson(this.toString());
     }
+
     @Override
     public String toString() {
 
-        return "{" + "\"topic\" : \"" + topic + "\", " + 
-                     "\"msgId\" : \"" + msgId + "\", " + 
-                     "\"payload\" : " + payload + "}";
+        return "{" + "\"topic\" : \"" + topic + "\", " +
+            "\"msgId\" : \"" + msgId + "\", " +
+            "\"payload\" : " + payload + "}";
 
     }
 }
