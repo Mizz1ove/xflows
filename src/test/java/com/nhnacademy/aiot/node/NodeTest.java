@@ -29,4 +29,9 @@ class NodeTest {
     @Test
     void start() {
     }
+
+    @Test
+    void testMsgReceivedCount(){
+        
+    }
 }
