@@ -14,15 +14,17 @@ public class Node implements Runnable {
     protected static int nodeCount;
     protected String name;
 
-    protected int inCount = 0;
-    protected int outCount = 0;
-    protected int errCount = 0;
+    protected int receivedMessageCount;
+    protected int sendMessageCount;
 
     protected final String id;
 
 
     protected Node(String id, boolean hasInputPort, int outputPortCount) {
         this.id = id;
+        this.receivedMessageCount = 0;
+        this.sendMessageCount = 0;
+
         if (hasInputPort) {
             this.inputPort = new Port();
         }
@@ -55,12 +57,14 @@ public class Node implements Runnable {
     protected void out(Message outMessage) {
 
         outputPorts[0].out(outMessage);
+        sendMessageCount++;
     }
 
     protected void out(Message... outMessages) {
 
         for (int i = 0; i < outMessages.length; i++) {
             outputPorts[i].out(outMessages[i]);
+            sendMessageCount++;
         }
     }
 
@@ -72,6 +76,32 @@ public class Node implements Runnable {
         if (portIdx < outputPorts.length) {
             outputPorts[portIdx].addWire(outputWire);
         }
+    }
+
+    public boolean MsgReceived() {
+        // 메시지 수신 횟수 세는 로직
+        if (inputPort.hasMessage()) {
+            receivedMessageCount++;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public int getMsgReceivedCount(){
+        // 메시지 수신 횟수 반환
+        return receivedMessageCount;
+    }
+
+    public int getMsgSendCount(){
+        //메시지 송신 횟수 반환
+        return sendMessageCount;
+    }
+
+    public int getMsgErrorCount(){
+        //에러 횟수 반환
+        return receivedMessageCount - sendMessageCount;
     }
 
 

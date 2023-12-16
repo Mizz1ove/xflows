@@ -1,6 +1,6 @@
 package com.nhnacademy.aiot.node;
 
-import com.nhnacademy.aiot.Database;
+import com.nhnacademy.aiot.db.Database;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.node.Node;
 

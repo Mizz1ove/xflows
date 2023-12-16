@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
 import com.nhnacademy.aiot.db.Database;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * MqttMapper
  */
+
 public class MqttMapper extends Node {
 
     protected MqttMapper(String id, boolean hasInputPort, int outputPortCount) {
@@ -16,7 +18,7 @@ public class MqttMapper extends Node {
 
     @Override
     protected void process() {
-        if (!inputPort.hasMessage()) {
+        if (!MsgReceived()) {
             return;
         }
         Message msg = inputPort.getMsg();
