@@ -1,5 +1,6 @@
 package com.nhnacademy.aiot.node;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.Port;
 import com.nhnacademy.aiot.Wire;
@@ -44,7 +45,7 @@ public class Node implements Runnable {
         log.info("start node : " + name);
     }
 
-    protected void process() {
+    protected void process() throws JsonProcessingException {
         // 이 메서드는 상속받는 하위 클래스에서 구현한다.
     }
 
@@ -85,7 +86,11 @@ public class Node implements Runnable {
         preprocess();
 
         while ((thread != null) && thread.isAlive()) {
-            process();
+            try {
+                process();
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
