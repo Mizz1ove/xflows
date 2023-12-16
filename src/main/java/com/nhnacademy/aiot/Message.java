@@ -12,8 +12,7 @@ public class Message {
     @Setter
     @Getter
     private String topic;
-    private long createTime;
-    private String msgId;
+    private final String msgId;
     @Getter
     @Setter
     private JsonNode payload;
@@ -21,7 +20,7 @@ public class Message {
     public Message(String topic, JsonNode payload) {
         this.topic = topic;
         this.payload = payload;
-        this.createTime = System.currentTimeMillis();
+        long createTime = System.currentTimeMillis();
         this.msgId = UUID.randomUUID().toString();
 
         ObjectNode objectNode = (ObjectNode)payload;
