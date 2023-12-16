@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nhnacademy.aiot.JSONUtils;
 import com.nhnacademy.aiot.Message;
 
 import java.time.LocalDateTime;
@@ -15,9 +16,8 @@ public class MqttMessageGenerator extends Node {
     }
 
     @Override
-    public void process() throws JsonProcessingException {
+    public void process() {
         String topic;
-        ObjectMapper mapper = new ObjectMapper();
 
         if (!inputPort.hasMessage()) return;
 
@@ -25,7 +25,7 @@ public class MqttMessageGenerator extends Node {
 
         LocalDateTime localDateTime = LocalDateTime.now();
 
-        String timeString = mapper.writeValueAsString(localDateTime);
+        String timeString = JSONUtils.objectToJsonString(localDateTime);
         ObjectNode jsonNode = JsonNodeFactory.instance.objectNode();
 
 

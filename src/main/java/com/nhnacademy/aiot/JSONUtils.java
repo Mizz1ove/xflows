@@ -20,4 +20,12 @@ public class JSONUtils {
             return null;
         }
     }
+
+    public static String objectToJsonString(Object obj){
+        try{
+            return objectMapper.writeValueAsString(obj);
+        }catch(Exception e){
+            return null;
+        }
+    }
 }
