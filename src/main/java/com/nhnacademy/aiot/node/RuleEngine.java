@@ -1,7 +1,7 @@
 package com.nhnacademy.aiot.node;
 
 import com.nhnacademy.aiot.Database;
-import com.nhnacademy.aiot.Msg;
+import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.node.Node;
 
 public class RuleEngine extends Node {
