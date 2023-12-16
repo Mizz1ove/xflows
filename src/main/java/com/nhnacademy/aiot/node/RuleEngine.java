@@ -35,8 +35,8 @@ public class RuleEngine extends Node {
 
         // TODO Modbus server register update
         // TODO 무슨레지스터인지 체크해서 저장 해야함 ..
-        int[] register = modbusServer.getRegister();
-        register[addr] = msg.getPayload().getData();
+        //int[] register = modbusServer.getRegister();
+        //register[addr] = msg.getPayload().getData();
 
 
     }

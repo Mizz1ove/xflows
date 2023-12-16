@@ -40,24 +40,24 @@ public class Node implements Runnable {
         this(id, true, outputPortCount);
     }
 
-    public void preprocess() {
+    protected void preprocess() {
         log.info("start node : " + name);
     }
 
-    public void process() {
+    protected void process() {
         // 이 메서드는 상속받는 하위 클래스에서 구현한다.
     }
 
-    public void postprocess() {
+    protected void postprocess() {
         log.info(this.getClass().getSimpleName() + " - stop");
     }
 
-    public void out(Message outMessage) {
+    protected void out(Message outMessage) {
 
         outputPorts[0].out(outMessage);
     }
 
-    public void out(Message... outMessages) {
+    protected void out(Message... outMessages) {
 
         for (int i = 0; i < outMessages.length; i++) {
             outputPorts[i].out(outMessages[i]);

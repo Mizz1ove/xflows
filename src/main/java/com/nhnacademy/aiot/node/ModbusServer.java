@@ -3,7 +3,7 @@ package com.nhnacademy.aiot.node;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.JSONUtils;
 import com.nhnacademy.aiot.Msg;
-import com.nhnacademy.aiot.modbus.FunctionCodes;
+//import com.nhnacademy.aiot.modbus.FunctionCodes;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class ModbusServer extends Node {
     public void process() {
         try {
             Socket socket = serverSocket.accept();
-            executorService.execute(()->뻥션(socket));
+            //executorService.execute(()->뻥션(socket));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -64,43 +64,43 @@ public class ModbusServer extends Node {
 
     }
 
-    private void 뻥션(Socket socket){
-        try(BufferedInputStream bufferedInputStream = new BufferedInputStream(socket.getInputStream());
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
-        ){
-            while(socket.isConnected()) {
-                byte[] inputBuffer = new byte[INPUT_BUFFER_SIZE];
-                int receicedLength = bufferedInputStream.read(inputBuffer, 0, inputBuffer.length);
-                byte[] mbapHeader = Arrays.copyOfRange(inputBuffer, 0, MBAP_HAEDER_LENGTH);
-                if (!isValidPacket(receicedLength, inputBuffer)) break;
+    // private void 뻥션(Socket socket){
+    //     try(BufferedInputStream bufferedInputStream = new BufferedInputStream(socket.getInputStream());
+    //         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(socket.getOutputStream())
+    //     ){
+    //         while(socket.isConnected()) {
+    //             byte[] inputBuffer = new byte[INPUT_BUFFER_SIZE];
+    //             int receicedLength = bufferedInputStream.read(inputBuffer, 0, inputBuffer.length);
+    //             byte[] mbapHeader = Arrays.copyOfRange(inputBuffer, 0, MBAP_HAEDER_LENGTH);
+    //             if (!isValidPacket(receicedLength, inputBuffer)) break;
 
-                byte[] requestPdu = Arrays.copyOfRange(inputBuffer, 7, receicedLength);
-                FunctionCodes function = FunctionCodes.getByCode(inputBuffer[FUNCTION_CODE_IDX]);
+    //             byte[] requestPdu = Arrays.copyOfRange(inputBuffer, 7, receicedLength);
+    //             //FunctionCodes function = FunctionCodes.getByCode(inputBuffer[FUNCTION_CODE_IDX]);
 
-                byte[] responsePdu = function.getFunction().apply(requestPdu);
+    //             byte[] responsePdu = function.getFunction().apply(requestPdu);
 
-                byte[] response = new byte[MBAP_HAEDER_LENGTH + responsePdu.length];
+    //             byte[] response = new byte[MBAP_HAEDER_LENGTH + responsePdu.length];
 
-                System.arraycopy(responsePdu, 0, response, 0, MBAP_HAEDER_LENGTH);
-                System.arraycopy(responsePdu, 0, response, 7, responsePdu.length);
+    //             System.arraycopy(responsePdu, 0, response, 0, MBAP_HAEDER_LENGTH);
+    //             System.arraycopy(responsePdu, 0, response, 7, responsePdu.length);
 
-                response[LENGTH_IDX] = (byte) (responsePdu.length + 1);
+    //             response[LENGTH_IDX] = (byte) (responsePdu.length + 1);
 
-                bufferedOutputStream.write(response);
-                bufferedOutputStream.flush();
+    //             bufferedOutputStream.write(response);
+    //             bufferedOutputStream.flush();
 
-                // TODO 이거 왜 함?
-                ObjectNode jsonNode = JSONUtils.getMapper().createObjectNode();
-                jsonNode.put("ModbusRespose", Arrays.toString(response));
-                Msg msg = new Msg("", jsonNode);
-                out(msg);
+    //             // TODO 이거 왜 함?
+    //             ObjectNode jsonNode = JSONUtils.getMapper().createObjectNode();
+    //             jsonNode.put("ModbusRespose", Arrays.toString(response));
+    //             Msg msg = new Msg("", jsonNode);
+    //             out(msg);
 
-            }
+    //         }
 
-        } catch (IOException e){
-            // TODO log 찍기
-        }
-    }
+    //     } catch (IOException e){
+    //         // TODO log 찍기
+    //     }
+    // }
 
     // TODO 예외처리
     private boolean isValidPacket(int receivedLength, byte[] inputBuffer){

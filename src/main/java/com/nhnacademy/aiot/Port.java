@@ -1,9 +1,9 @@
 package com.nhnacademy.aiot;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Port {
     private List<Wire> wires;
@@ -11,7 +11,7 @@ public class Port {
 
     public Port() {
         this.wires = new ArrayList<>();
-        this.messageQueue = new LinkedList<>();
+        this.messageQueue = new ConcurrentLinkedQueue<>();
     }
 
     public void addWire(Wire wire) {
@@ -55,7 +55,7 @@ public class Port {
     }
 
     public Message getMsg() {
-
         return messageQueue.poll();
     }
 }
+
