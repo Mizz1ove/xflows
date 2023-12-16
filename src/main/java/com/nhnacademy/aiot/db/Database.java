@@ -1,12 +1,13 @@
-package com.nhnacademy.aiot;
+package com.nhnacademy.aiot.db;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.nhnacademy.aiot.SensorData;
 
 public class Database {
 
-    public static Map<String, SensorData> sensorDataMap = new HashMap<>();
-    public static Map<String,String> modbusSensorMap = new HashMap<>();
+    public static final Map<String, SensorData> sensorDataMap = new HashMap<>();
+    public static final Map<String,String> modbusSensorMap = new HashMap<>();
 
     static {
         SensorData sensorData = SensorData.builder()

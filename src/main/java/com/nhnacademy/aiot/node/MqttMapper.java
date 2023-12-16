@@ -1,11 +1,9 @@
 package com.nhnacademy.aiot.node;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.nhnacademy.aiot.Database;
-import com.nhnacademy.aiot.Msg;
+import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
+import com.nhnacademy.aiot.db.Database;
 
 /**
  * MqttMapper
@@ -14,11 +12,6 @@ public class MqttMapper extends Node {
 
     protected MqttMapper(String id, boolean hasInputPort, int outputPortCount) {
         super(id, hasInputPort, outputPortCount);
-        // TODO Auto-generated constructor stub
-    }
-
-    @Override
-    protected void preprocess() {
     }
 
     @Override
@@ -26,7 +19,7 @@ public class MqttMapper extends Node {
         if (!inputPort.hasMessage()) {
             return;
         }
-        Msg msg = inputPort.getMsg();
+        Message msg = inputPort.getMsg();
         ObjectNode payload = (ObjectNode) msg.getPayload();
         SensorData sensorData = Database.sensorDataMap.get(payload.path("deviceId").asText());
         payload.put("address", sensorData.getAddress());
@@ -35,8 +28,6 @@ public class MqttMapper extends Node {
 
     }
 
-    @Override
-    protected void postprocess() {}
 
 
 }

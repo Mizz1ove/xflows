@@ -1,10 +1,9 @@
 package com.nhnacademy.aiot.node;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.nhnacademy.aiot.Database;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
+import com.nhnacademy.aiot.db.Database;
 
 public class ModbusMapper extends Node {
 
@@ -14,10 +13,6 @@ public class ModbusMapper extends Node {
         super(id, true, 1);
     }
 
-    @Override
-    public void preprocess() {
-
-    }
 
     @Override
     public void process() {
@@ -31,10 +26,6 @@ public class ModbusMapper extends Node {
 
     }
 
-    @Override
-    public void postprocess() {
-
-    }
 
     private Message addInfo(Message msg){
 
@@ -52,7 +43,8 @@ public class ModbusMapper extends Node {
 
         payload.put("value", payload.path("data").asInt() * ratio ); // 정수 int 값에 곱하기 비율 -> actual Value
 
-    //     return msg;
-    // }
+        return msg;
+    }
 
 }
+
