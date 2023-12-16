@@ -7,8 +7,6 @@ import com.nhnacademy.aiot.db.Database;
 
 public class ModbusMapper extends Node {
 
-    private double ratio;
-
     ModbusMapper(String id) {
         super(id, true, 1);
     }
@@ -29,8 +27,9 @@ public class ModbusMapper extends Node {
 
     private Message addInfo(Message msg){
 
-        // TODO : payloadID 만들기
-        String sensorId = Database.modbusSensorMap.get("");
+        String unitId = msg.getPayload().path("unitId").asText();
+        String address = msg.getPayload().path("address").asText();
+        String sensorId = Database.modbusSensorMap.get(unitId+"-"+address);
         SensorData sensorData = Database.sensorDataMap.get(sensorId);
         // TODO sensorData null이면 예외처리
 
@@ -41,6 +40,7 @@ public class ModbusMapper extends Node {
         payload.put("branch", sensorData.getBranch());
         payload.put("place", sensorData.getPlace());
 
+        double ratio = sensorData.getRatio();
         payload.put("value", payload.path("data").asInt() * ratio ); // 정수 int 값에 곱하기 비율 -> actual Value
 
         return msg;

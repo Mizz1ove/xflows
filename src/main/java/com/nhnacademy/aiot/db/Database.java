@@ -54,6 +54,5 @@ public class Database {
         sensorDataMap.put(sensorData3.getDeviceId(), sensorData3);
         sensorDataMap.put(sensorData4.getDeviceId(), sensorData4);
         sensorDataMap.put(sensorData5.getDeviceId(), sensorData5);
-        modbusSensorMap.put("1-3-1", "1234-temperature");
     }
 }

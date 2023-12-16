@@ -14,6 +14,8 @@ public class SensorData {
     private String register;
     private int address;
     private double value;
+    private double ratio;
+
     @Override
     public String toString() {
         return "SensorData [deviceId=" + deviceId + ", site=" + site + ", branch=" + branch
