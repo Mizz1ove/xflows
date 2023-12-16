@@ -2,14 +2,13 @@ package com.nhnacademy.aiot.node;
 
 import java.util.LinkedList;
 import java.util.Queue;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.nhnacademy.aiot.JSONUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import com.nhnacademy.aiot.Message;
-import com.nhnacademy.aiot.Msg;
+import com.nhnacademy.aiot.utils.JSONUtils;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class MqttIn extends Node {
 
     private String topicFilter;
@@ -25,7 +24,7 @@ public class MqttIn extends Node {
 
     @Override
     public void preprocess() {
-
+        log.info("start node : " + name);
         try {
             mqttClient.connect();
             mqttClient.subscribe(topicFilter, (topic, message) ->{
@@ -43,7 +42,7 @@ public class MqttIn extends Node {
         if(innerQueue.isEmpty()){
             return;
         }
-        Message msg = innerQueue.poll();
+        out(innerQueue.poll());
     }
 
     @Override

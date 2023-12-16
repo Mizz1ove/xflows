@@ -1,10 +1,10 @@
 package com.nhnacademy.aiot.node;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.nhnacademy.aiot.JSONUtils;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.Port;
 import com.nhnacademy.aiot.Wire;
+import com.nhnacademy.aiot.utils.JSONUtils;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

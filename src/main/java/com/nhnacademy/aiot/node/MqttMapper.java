@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
 import com.nhnacademy.aiot.db.Database;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * MqttMapper
  */
+@Log4j2
 public class MqttMapper extends Node {
 
     protected MqttMapper(String id, boolean hasInputPort, int outputPortCount) {
@@ -19,12 +21,21 @@ public class MqttMapper extends Node {
         if (!inputPort.hasMessage()) {
             return;
         }
+
         Message msg = inputPort.getMsg();
         ObjectNode payload = (ObjectNode) msg.getPayload();
-        SensorData sensorData = Database.sensorDataMap.get(payload.path("deviceId").asText());
-        payload.put("address", sensorData.getAddress());
+        String deviceId = msg.getPayload().path("devEui").asText();
+        String sensorType = msg.getPayload().path("sensorType").asText();
+        try {
+            SensorData sensorData = Database.sensorDataMap.get(deviceId + "-" + sensorType);
+            payload.put("address", sensorData.getAddress());
+            log.debug(msg);
+            out(msg);
+        } catch (NullPointerException e) {
 
-        out(msg);
+        }
+
+
 
     }
 

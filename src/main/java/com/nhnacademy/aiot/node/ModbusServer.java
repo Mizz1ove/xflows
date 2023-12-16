@@ -1,8 +1,7 @@
 package com.nhnacademy.aiot.node;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.nhnacademy.aiot.JSONUtils;
-import com.nhnacademy.aiot.Msg;
+import com.nhnacademy.aiot.utils.JSONUtils;
 //import com.nhnacademy.aiot.modbus.FunctionCodes;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
