@@ -1,54 +1,54 @@
 package com.nhnacademy.aiot;
 
 import java.util.UUID;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import java.util.UUID;
-
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nhnacademy.aiot.util.JSONUtils;
 
 public class Message {
-    String id;
-    ObjectNode objectNode;
-    ObjectMapper objectMapper = new ObjectMapper();
 
-    public Message(String topic, MqttMessage message){
+    private String topic;
+    private long createTime;
+    private String msgId;
+    private JsonNode payload;
 
-        String payload =  new String(message.getPayload());
+    public Msg(String topic, JsonNode payload) {
+        this.topic = topic;
+        this.payload = payload;
+        this.createTime = System.currentTimeMillis();
+        this.msgId = UUID.randomUUID().toString();
 
+        ObjectNode objectNode = (ObjectNode)payload;
+        objectNode.put("time", createTime);
     }
 
-    public Message(ObjectNode objectNode){
-        this.objectNode = objectNode;
-        this.id = UUID.randomUUID().toString();
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
-
-    // Todo : 원하는 value 를 String 으로 return
-    public JsonNode PhasePath(String paths, String payload) {
-
-        String str = payload;
-        JsonNode jsonNode = JSONUtils.parseJson(str);
-
-        String[] arr = getPhasePath(paths);
-        for (int i = 0; i < arr.length; i++) {
-            jsonNode = jsonNode.path(arr[i]);
-        }
-        return jsonNode;
-
+    public void setPayload(JsonNode payload) {
+        this.payload = payload;
     }
 
-    // Todo : "."을 포함한 String으로 받아서 배열로 return
-    public String[] getPhasePath(String paths) {
-        String[] pathArr = paths.split("\\.");
-        return pathArr;
+    public JsonNode getPayload() {
+        return payload;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public JsonNode getJSON() {
+
+        return JSONUtils.parseJson(this.toString());
+    }
+
+    @Override
+    public String toString() {
+
+        return "{" + "\"topic\" : \"" + topic + "\", " +
+            "\"msgId\" : \"" + msgId + "\", " +
+            "\"payload\" : " + payload + "}";
+
+    }
 }

@@ -4,22 +4,22 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Wire {
-    Queue<Message> messageQueue;
+    Queue<Message> msgQueue;
 
-    public Wire() {
-        messageQueue = new LinkedList<>();
+    public Wire(){
+        msgQueue = new LinkedList<>();
     }
 
     public void put(Message message) {
-        messageQueue.offer(message);
+        msgQueue.offer(message);
     }
 
     public boolean hasMessage() {
-        return !messageQueue.isEmpty();
+        return !msgQueue.isEmpty();
     }
 
     public Message get() {
-        return messageQueue.poll();
+        return msgQueue.poll();
     }
 
 }
