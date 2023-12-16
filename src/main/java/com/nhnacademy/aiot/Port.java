@@ -19,6 +19,7 @@ public class Port {
     }
 
     public Message get() {
+
         for (Wire wire : wireList) {
             if (wire.hasMessage()) {
                 return wire.messageQueue.poll();

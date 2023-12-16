@@ -25,16 +25,16 @@ public class Message {
 
 
     // Todo : 원하는 value 를 String 으로 return
-    public String PhasePath(String paths, String payload) {
+    public JsonNode PhasePath(String paths, String payload) {
 
-        String str = payload.toString();
+        String str = payload;
         JsonNode jsonNode = JSONUtils.parseJson(str);
 
         String[] arr = getPhasePath(paths);
         for (int i = 0; i < arr.length; i++) {
             jsonNode = jsonNode.path(arr[i]);
         }
-        return jsonNode.asText();
+        return jsonNode;
 
     }
 
@@ -43,4 +43,5 @@ public class Message {
         String[] pathArr = paths.split("\\.");
         return pathArr;
     }
+
 }

@@ -21,6 +21,17 @@ public class JSONUtils {
             return null;
         }
     }
+    public String convertToString(JsonNode jsonNode) {
+        return jsonNode.asText();
+    }
+
+    public int convertToInt(JsonNode jsonNode) {
+        return jsonNode.asInt();
+    }
+
+    public double convertToDouble(JsonNode jsonNode) {
+        return jsonNode.asDouble();
+    }
 
 
 }
