@@ -3,12 +3,12 @@ package com.nhnacademy.aiot.node;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.JSONUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import com.nhnacademy.aiot.Message;
+import com.nhnacademy.aiot.Msg;
 
 public class MqttIn extends Node {
 
@@ -21,7 +21,6 @@ public class MqttIn extends Node {
         this.mqttClient = FlowGenerator.clientMap.get(clientId);
         this.topicFilter = topicFilter;
         this.innerQueue = new LinkedList<>();
-//        this.objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -30,10 +29,8 @@ public class MqttIn extends Node {
         try {
             mqttClient.connect();
             mqttClient.subscribe(topicFilter, (topic, message) ->{
-                System.out.println("message ~~");
                 String payload = new String( message.getPayload());
-                innerQueue.add(new Message((ObjectNode) JSONUtils.parseJson(payload)));
-                System.out.println(innerQueue.size());
+                innerQueue.add(new Message("", JSONUtils.parseJson(payload)));
             });
         } catch (MqttException e) {
             e.printStackTrace();
@@ -43,9 +40,10 @@ public class MqttIn extends Node {
 
     @Override
     protected void process() {
-        if(!innerQueue.isEmpty()){
-            out(innerQueue.poll());
+        if(innerQueue.isEmpty()){
+            return;
         }
+        Message msg = innerQueue.poll();
     }
 
     @Override

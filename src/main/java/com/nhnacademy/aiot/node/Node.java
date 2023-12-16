@@ -1,6 +1,7 @@
 package com.nhnacademy.aiot.node;
 
 import com.nhnacademy.aiot.Message;
+import com.nhnacademy.aiot.Msg;
 import com.nhnacademy.aiot.Port;
 import com.nhnacademy.aiot.Wire;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -16,7 +17,7 @@ abstract class Node implements Runnable {
     protected static int nodeCount;
 
     protected Node(String id, boolean hasInputPort, int outputPortCount) {
-        this.thread = new Thread();
+        this.thread = new Thread(this);
         this.id = id;
         this.outputPorts = new Port[outputPortCount];
 
@@ -38,12 +39,12 @@ abstract class Node implements Runnable {
     protected abstract void process();
     protected abstract void postprocess();
 
-    public void out(Message message) {
+    public void out(Msg message) {
 
         outputPorts[0].out(message);
     }
 
-    public void out(Message... messages) {
+    public void out(Msg... messages) {
 
         for (int i = 0; i < messages.length; i++) {
             outputPorts[i].out(messages[i]);
@@ -65,14 +66,14 @@ abstract class Node implements Runnable {
     public void run() {
         try {
             preprocess();
-            while ((thread != null) &&!Thread.currentThread().isInterrupted()) {
+            while (true) {
 
                 process();
                 Thread.sleep(1000);
 
             }
 
-            postprocess();
+           // postprocess();
 
         } catch (InterruptedException e) {
 

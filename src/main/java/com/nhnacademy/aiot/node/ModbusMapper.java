@@ -23,8 +23,8 @@ public class ModbusMapper extends Node {
         }
 
         Msg msg = inputPort.getMsg();
-        Msg modifiedMsg = addInfo(msg);
-        out(modifiedMsg);
+        //Msg modifiedMsg = addInfo(msg);
+       // out(modifiedMsg);
 
     }
 
@@ -33,21 +33,21 @@ public class ModbusMapper extends Node {
 
     }
 
-    private Msg addInfo(Msg msg){
+    // private Msg addInfo(Msg msg){
 
-        String sensorId = Database.modbusSensorMap.get(페이로드에서 아이디 만들기);
-        SensorData sensorData = Database.sensorDataMap.get(sensorId);
-        // TODO sensorData null이면 예외처리
+    //     String sensorId = Database.modbusSensorMap.get(페이로드에서 아이디 만들기);
+    //     SensorData sensorData = Database.sensorDataMap.get(sensorId);
+    //     // TODO sensorData null이면 예외처리
 
-        ObjectNode payload = msg.getPayload();
+    //     ObjectNode payload = msg.getPayload();
 
-        payload.put("deviceId", sensorId);
-        payload.put("site", sensorData.getSite());
-        payload.put("branch", sensorData.getBranch());
-        payload.put("place", sensorData.getPlace());
-        payload.put("value", payload.path("data") * ratio);
+    //     payload.put("deviceId", sensorId);
+    //     payload.put("site", sensorData.getSite());
+    //     payload.put("branch", sensorData.getBranch());
+    //     payload.put("place", sensorData.getPlace());
+    //     payload.put("value", payload.path("data") * ratio);
 
-        return msg;
-    }
+    //     return msg;
+    // }
 
 }
