@@ -1,4 +1,4 @@
-package com.nhnacademy.aiot;
+package com.nhnacademy.aiot.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

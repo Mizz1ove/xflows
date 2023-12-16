@@ -3,6 +3,7 @@ package com.nhnacademy.aiot;
 import java.util.UUID;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nhnacademy.aiot.utils.JSONUtils;
 
 
 public class Message {
