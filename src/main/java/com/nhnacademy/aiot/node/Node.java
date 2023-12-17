@@ -1,5 +1,7 @@
 package com.nhnacademy.aiot.node;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.Port;
 import com.nhnacademy.aiot.Wire;
@@ -16,6 +18,8 @@ public class Node implements Runnable {
 
     protected int receivedMessageCount;
     protected int sendMessageCount;
+    protected long startTime;
+    protected long endTime;
 
     protected final String id;
 
@@ -44,6 +48,7 @@ public class Node implements Runnable {
 
     protected void preprocess() {
         log.info("start node : " + name);
+        startTime = System.currentTimeMillis();
     }
 
     protected void process() {
@@ -52,6 +57,8 @@ public class Node implements Runnable {
 
     protected void postprocess() {
         log.info(this.getClass().getSimpleName() + " - stop");
+        endTime = System.currentTimeMillis();
+        log.debug(this.getClass().getSimpleName() + getOperatingTime());
     }
 
     protected void out(Message outMessage) {
@@ -102,6 +109,19 @@ public class Node implements Runnable {
     public int getMsgErrorCount(){
         //에러 횟수 반환
         return receivedMessageCount - sendMessageCount;
+    }
+
+    public String startTime(){
+        // 시작 시간 반환
+        long curTime = System.currentTimeMillis();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        return timeFormat.format(new Date(curTime));
+    }
+
+    public String getOperatingTime(){
+        long operatingTime = endTime - startTime;
+        SimpleDateFormat timeForamt = new SimpleDateFormat("hhh:mm:ss");
+        return timeForamt.format(new Date(operatingTime));
     }
 
 
