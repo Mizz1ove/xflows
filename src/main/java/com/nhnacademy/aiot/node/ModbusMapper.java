@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
 import com.nhnacademy.aiot.db.Database;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ModbusMapper extends Node {
 
     ModbusMapper(String id) {
@@ -31,18 +33,19 @@ public class ModbusMapper extends Node {
         String address = msg.getPayload().path("address").asText();
         String sensorId = Database.modbusSensorMap.get(unitId+"-"+address);
         SensorData sensorData = Database.sensorDataMap.get(sensorId);
+        String sensorType = sensorId.split("-")[1];
         // TODO sensorData null이면 예외처리
 
-        ObjectNode payload = (ObjectNode) msg.getPayload();
+        ObjectNode payload = msg.getPayload();
 
-        payload.put("deviceId", sensorId);
+        payload.put("devEui", sensorId);
         payload.put("site", sensorData.getSite());
         payload.put("branch", sensorData.getBranch());
         payload.put("place", sensorData.getPlace());
+        payload.put("sensorType", sensorType);
 
         double ratio = sensorData.getRatio();
-        payload.put("value", payload.path("data").asInt() * ratio ); // 정수 int 값에 곱하기 비율 -> actual Value
-
+        payload.put(sensorType, payload.path("data").asInt() * ratio ); // 정수 int 값에 곱하기 비율 -> actual Value
         return msg;
     }
 

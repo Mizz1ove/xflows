@@ -29,7 +29,6 @@ public class MqttMapper extends Node {
         try {
             SensorData sensorData = Database.sensorDataMap.get(deviceId + "-" + sensorType);
             payload.put("address", sensorData.getAddress());
-            log.debug(msg);
             out(msg);
         } catch (NullPointerException e) {
 

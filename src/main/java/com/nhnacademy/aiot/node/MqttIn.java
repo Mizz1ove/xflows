@@ -1,9 +1,11 @@
 package com.nhnacademy.aiot.node;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Queue;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import com.nhnacademy.aiot.FlowGenerator;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.utils.JSONUtils;
 import lombok.extern.log4j.Log4j2;
@@ -25,6 +27,7 @@ public class MqttIn extends Node {
     @Override
     public void preprocess() {
         log.info("start node : " + name);
+        startTime = LocalDateTime.now(); 
         try {
             mqttClient.connect();
             mqttClient.subscribe(topicFilter, (topic, message) ->{
@@ -45,8 +48,5 @@ public class MqttIn extends Node {
         out(innerQueue.poll());
     }
 
-    @Override
-    protected void postprocess() {
 
-    }
 }

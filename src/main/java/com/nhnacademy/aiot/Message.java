@@ -11,15 +11,15 @@ public class Message {
     private String topic;
     private long createTime;
     private String msgId;
-    private JsonNode payload;
+    private ObjectNode payload;
 
-    public Message(String topic, JsonNode payload) {
+    public Message(String topic, ObjectNode payload) {
         this.topic = topic;
         this.payload = payload;
         this.createTime = System.currentTimeMillis();
         this.msgId = UUID.randomUUID().toString();
 
-        ObjectNode objectNode = (ObjectNode)payload;
+        ObjectNode objectNode = payload;
         objectNode.put("time", createTime);
     }
 
@@ -27,11 +27,11 @@ public class Message {
         this.topic = topic;
     }
 
-    public void setPayload(JsonNode payload) {
+    public void setPayload(ObjectNode payload) {
         this.payload = payload;
     }
 
-    public JsonNode getPayload() {
+    public ObjectNode getPayload() {
         return payload;
     }
 

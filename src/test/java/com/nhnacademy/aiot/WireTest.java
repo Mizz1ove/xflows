@@ -2,6 +2,7 @@ package com.nhnacademy.aiot;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ class WireTest {
 
     @Test
     public void testPutAndHasMessage() {
-        JsonNode payload = new JsonNodeFactory(false).objectNode().put("test", "test");
+        ObjectNode payload = new JsonNodeFactory(false).objectNode().put("test", "test");
         Message message = new Message("test", payload);
 
         wire.put(message);

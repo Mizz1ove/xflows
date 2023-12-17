@@ -1,22 +1,18 @@
 package com.nhnacademy.aiot.node;
 
 import com.nhnacademy.aiot.db.Database;
+import com.nhnacademy.aiot.node.modbus.ModbusServerNode;
 import java.util.Objects;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
-import com.nhnacademy.aiot.node.Node;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class RuleEngine extends Node {
-
-    ModbusServer modbusServer; // TODO set
 
     RuleEngine(String id){
         super(id, true, 2);
-    }
-
-    @Override
-    public void preprocess() {
-
     }
 
     @Override
@@ -28,27 +24,42 @@ public class RuleEngine extends Node {
             
         Message msg = inputPort.getMsg();
 
-        // TODO db에 저장
-        String deviceId = msg.getPayload().path("devEui").asText();
-        String sensorType = msg.getPayload().path("sensorType").asText();
-        double value = msg.getPayload().path(sensorType).asDouble(); // TODO String 타입이 아닌가?
-        SensorData sensorData = Database.sensorDataMap.get(deviceId+"-"+sensorType);
-        if (!Objects.isNull(sensorData)) {
-            sensorData.setValue(value);
+        if(msg.getPayload().has("data")){
+            modBusMessage(msg);
+        }else {
+            mqttMessage(msg);
         }
 
-        // TODO MQTT outNode로 보내기
+    }
+
+    private void mqttMessage(Message msg) {
+         String deviceId = msg.getPayload().path("devEui").asText();
+        String sensorType = msg.getPayload().path("sensorType").asText();
+        double value = msg.getPayload().path(sensorType).asDouble();
+        SensorData sensorData = Database.sensorDataMap.get(deviceId+"-"+sensorType);
+        int address  = msg.getPayload().path("address").asInt();
+        if (Objects.isNull(sensorData)) {
+            return;
+        }
+        sensorData.setValue(value);
+        ModbusServerNode.inputRegisters[address]= (int)(value * 10);
+        ObjectNode payload = msg.getPayload();
+        payload.put("branch", sensorData.getBranch());
+        payload.put("place", sensorData.getPlace());
+        payload.put("value", sensorData.getValue());
+        log.debug("MQTTTT "+msg);
         out(msg);
-        // TODO Modbus server register update
-        // TODO 무슨레지스터인지 체크해서 저장 해야함 ..
-        //int[] register = modbusServer.getRegister();
-        //register[addr] = msg.getPayload().getData();
-
-
     }
 
-    @Override
-    protected void postprocess() {
+
+    private void modBusMessage(Message msg) {
+        int address  = msg.getPayload().path("address").asInt();
+        double value = msg.getPayload().path("data").asDouble();
+        ModbusServerNode.inputRegisters[address] = (int)(value);
+        System.out.println(value + "인풋레지스터값" + ModbusServerNode.inputRegisters[address]);
+         log.debug("MODBUS "+msg);
+        out(msg);
 
     }
+    
 }

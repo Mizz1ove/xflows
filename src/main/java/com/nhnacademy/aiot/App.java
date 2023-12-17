@@ -1,6 +1,6 @@
 package com.nhnacademy.aiot;
 
-import com.nhnacademy.aiot.node.FlowGenerator;
+import com.nhnacademy.aiot.FlowGenerator;
 import com.nhnacademy.aiot.node.MqttIn;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;

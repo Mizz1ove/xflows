@@ -2,10 +2,9 @@ package com.nhnacademy.aiot.node;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import com.nhnacademy.aiot.FlowGenerator;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MqttInTest {

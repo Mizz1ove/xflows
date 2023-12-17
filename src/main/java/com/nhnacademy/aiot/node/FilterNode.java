@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.utils.JSONUtils;
-import lombok.extern.log4j.Log4j2;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 import java.util.Map.Entry;
 
-@Log4j2
 public class FilterNode extends Node {
 
     private static final String NODE_ID = "id";
@@ -41,8 +39,10 @@ public class FilterNode extends Node {
             return;
         }
         Message msg = inputPort.getMsg();
+        
         JsonNode inPayload = msg.getPayload();
         ObjectNode outPayload = createFilteredPayload(inPayload);
+        
         
         msg.setPayload(outPayload);
         out(msg);

@@ -1,5 +1,7 @@
 package com.nhnacademy.aiot.node;
 
+import java.time.LocalDateTime;
+import com.nhnacademy.aiot.FlowGenerator;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.Port;
 import com.nhnacademy.aiot.Wire;
@@ -19,7 +21,7 @@ public class Node implements Runnable {
     protected int errCount = 0;
 
     protected final String id;
-
+    protected LocalDateTime startTime;
 
     protected Node(String id, boolean hasInputPort, int outputPortCount) {
         this.id = id;
@@ -34,6 +36,7 @@ public class Node implements Runnable {
         for (int i = 0; i < outputPortCount; i++) {
             outputPorts[i] = new Port();
         }
+        FlowGenerator.nodeMap.put(id, this);
     }
 
     protected Node(String id, int outputPortCount) {
@@ -42,6 +45,7 @@ public class Node implements Runnable {
 
     protected void preprocess() {
         log.info("start node : " + name);
+        startTime = LocalDateTime.now(); 
     }
 
     protected void process() {
@@ -49,7 +53,7 @@ public class Node implements Runnable {
     }
 
     protected void postprocess() {
-        log.info(this.getClass().getSimpleName() + " - stop");
+        log.info(getClass().getSimpleName() + " : 수신 - " + inCount + " 송신 - " + outCount + " 시작시간 -" + startTime + " 종료시간 - " + LocalDateTime.now());
     }
 
     protected void out(Message outMessage) {
@@ -85,16 +89,24 @@ public class Node implements Runnable {
         preprocess();
 
         while ((thread != null) && thread.isAlive()) {
+            
             process();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 if (thread != null) {
                     thread.interrupt();
+                    break;
                 }
             }
         }
-
         postprocess();
+
+        
+    }
+    public void stop() {
+        if (thread != null) {
+            thread.interrupt();
+        }
     }
 }

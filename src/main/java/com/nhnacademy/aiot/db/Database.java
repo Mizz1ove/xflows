@@ -96,7 +96,16 @@ public class Database {
             .address(106)
             .build();  
 
-
+        // modbusSensor
+        SensorData sensorData11 = SensorData.builder()
+            .deviceId("1234-temperature")
+            .branch("gyeongnam")
+            .site("nhnacademy")
+            .place("lobby")
+            .ratio(0.1)
+            .register("input")
+            .address(0)
+            .build();  
 
         sensorDataMap.put(sensorData.getDeviceId(), sensorData);
         sensorDataMap.put(sensorData2.getDeviceId(), sensorData2);
@@ -104,11 +113,12 @@ public class Database {
         sensorDataMap.put(sensorData4.getDeviceId(), sensorData4);
         sensorDataMap.put(sensorData5.getDeviceId(), sensorData5);
         sensorDataMap.put(sensorData6.getDeviceId(), sensorData6);
-        sensorDataMap.put(sensorData7.getDeviceId(), sensorData6);
-        sensorDataMap.put(sensorData8.getDeviceId(), sensorData6);
-        sensorDataMap.put(sensorData9.getDeviceId(), sensorData6);
-        sensorDataMap.put(sensorData10.getDeviceId(), sensorData6);
+        sensorDataMap.put(sensorData7.getDeviceId(), sensorData7);
+        sensorDataMap.put(sensorData8.getDeviceId(), sensorData8);
+        sensorDataMap.put(sensorData9.getDeviceId(), sensorData9);
+        sensorDataMap.put(sensorData10.getDeviceId(), sensorData10);
+        sensorDataMap.put(sensorData11.getDeviceId(), sensorData11);
 
-        modbusSensorMap.put("1-3-1", "1234-temperature");
+        modbusSensorMap.put("1-0", "1234-temperature");
     }
 }
