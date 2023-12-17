@@ -16,15 +16,16 @@ public class Node implements Runnable {
     protected static int nodeCount;
     protected String name;
 
-    protected int inCount = 0;
-    protected int outCount = 0;
-    protected int errCount = 0;
-
+    protected int receivedMessageCount;
+    protected int sendMessageCount;
+    
     protected final String id;
     protected LocalDateTime startTime;
 
     protected Node(String id, boolean hasInputPort, int outputPortCount) {
         this.id = id;
+        this.receivedMessageCount = 0;
+        this.sendMessageCount = 0;
         if (hasInputPort) {
             this.inputPort = new Port();
         }
@@ -53,11 +54,11 @@ public class Node implements Runnable {
     }
 
     protected void postprocess() {
-        log.info(getClass().getSimpleName() + " : 수신 - " + inCount + " 송신 - " + outCount + " 시작시간 -" + startTime + " 종료시간 - " + LocalDateTime.now());
+        log.info(getClass().getSimpleName() + " : 수신 - " + receivedMessageCount + " 송신 - " + sendMessageCount + " 시작시간 -" + startTime + " 종료시간 - " + LocalDateTime.now());
     }
 
     protected void out(Message outMessage) {
-
+        sendMessageCount++;
         outputPorts[0].out(outMessage);
     }
 
@@ -78,6 +79,20 @@ public class Node implements Runnable {
         }
     }
 
+    private boolean msgReceived() {
+        if(inputPort == null){
+            return true;
+        }
+        if (inputPort.hasMessage()) {
+            receivedMessageCount++;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
 
     public synchronized void start() {
         thread = new Thread(this, this.getClass().getSimpleName());
@@ -89,8 +104,9 @@ public class Node implements Runnable {
         preprocess();
 
         while ((thread != null) && thread.isAlive()) {
-            
-            process();
+            if(msgReceived()){
+                process();
+            }
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

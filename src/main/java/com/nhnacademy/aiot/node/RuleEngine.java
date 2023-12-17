@@ -47,7 +47,6 @@ public class RuleEngine extends Node {
         payload.put("branch", sensorData.getBranch());
         payload.put("place", sensorData.getPlace());
         payload.put("value", sensorData.getValue());
-        log.debug("MQTTTT "+msg);
         out(msg);
     }
 
@@ -56,8 +55,6 @@ public class RuleEngine extends Node {
         int address  = msg.getPayload().path("address").asInt();
         double value = msg.getPayload().path("data").asDouble();
         ModbusServerNode.inputRegisters[address] = (int)(value);
-        System.out.println(value + "인풋레지스터값" + ModbusServerNode.inputRegisters[address]);
-         log.debug("MODBUS "+msg);
         out(msg);
 
     }

@@ -5,11 +5,11 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.node.Node;
 import com.nhnacademy.aiot.utils.JSONUtils;
 import lombok.extern.log4j.Log4j2;
@@ -46,6 +46,7 @@ public class ModbusServerNode extends Node {
 
     @Override
     public void preprocess() {
+        startTime = LocalDateTime.now();
         executorService = Executors.newFixedThreadPool(THREADPOOL_SIZE);
         try {
             serverSocket = new ServerSocket(DEFAULT_PORT);

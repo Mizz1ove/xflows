@@ -31,6 +31,7 @@ public class MqttIn extends Node {
         try {
             mqttClient.connect();
             mqttClient.subscribe(topicFilter, (topic, message) ->{
+                receivedMessageCount++;
                 String payload = new String( message.getPayload());
                 innerQueue.add(new Message("", JSONUtils.parseJson(payload)));
             });
