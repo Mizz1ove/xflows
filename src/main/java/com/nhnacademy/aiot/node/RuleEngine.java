@@ -56,7 +56,6 @@ public class RuleEngine extends Node {
         double value = msg.getPayload().path("data").asDouble();
         ModbusServerNode.inputRegisters[address] = (int)(value);
         out(msg);
-
     }
     
 }

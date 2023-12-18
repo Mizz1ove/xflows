@@ -41,11 +41,13 @@ public class ModbusServerNode extends Node {
     ServerSocket serverSocket;
 
     public ModbusServerNode(String id, int outputPortCount) {
-        super(id, outputPortCount);
+        super(id, false , outputPortCount);
+
     }
 
     @Override
     public void preprocess() {
+        log.info("start node : " + name);
         startTime = LocalDateTime.now();
         executorService = Executors.newFixedThreadPool(THREADPOOL_SIZE);
         try {
@@ -58,6 +60,7 @@ public class ModbusServerNode extends Node {
     @Override
     public void process() {
         try {
+            System.out.println();
             Socket socket = serverSocket.accept();
             log.debug("connected - " + socket.getRemoteSocketAddress());
             executorService.execute(() -> tcp(socket));
@@ -79,11 +82,9 @@ public class ModbusServerNode extends Node {
                 if (!isValidPacket(receivedLength, inputBuffer)) {
                     break;
                 }
-                System.out.println("요청들어옴~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
                 byte[] requestPdu = Arrays.copyOfRange(inputBuffer, 7, receivedLength);
                 FunctionCodes function = FunctionCodes.getByCode(inputBuffer[FUNCTION_CODE_IDX]);
 
-                System.out.println(Arrays.toString(requestPdu));
                 byte[] responsePdu = function.getFunction().apply(requestPdu);
 
                 byte[] modbusResponse = new byte[mbapHeader.length + responsePdu.length];
@@ -98,7 +99,6 @@ public class ModbusServerNode extends Node {
                 ObjectNode jsonNode = JSONUtils.getMapper().createObjectNode();
                 jsonNode.put("ModbusResponse", Arrays.toString(modbusResponse));
 
-                System.out.println(Arrays.toString(modbusResponse));
                 outputStream.write(modbusResponse);
                 outputStream.flush();
             }
