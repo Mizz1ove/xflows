@@ -7,13 +7,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.nhnacademy.aiot.FlowGenerator;
 import com.nhnacademy.aiot.Message;
 
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 
+@EqualsAndHashCode
 public class MqttOutNode extends Node {
 
     private static final String NODE_ID = "id";
     private static final String WIRES = "wires";
-    private static final String CLIENT_ID = "clientId";
+    private static final String CLIENT_ID = "client";
 
     private MqttClient mqttClient;
 
@@ -61,7 +63,5 @@ public class MqttOutNode extends Node {
             e.printStackTrace();
         }
     }
-
-
 
 }

@@ -5,9 +5,12 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
+
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@EqualsAndHashCode
 public class SplitNode extends Node {
 
     private static final String NODE_ID = "id";
@@ -31,8 +34,8 @@ public class SplitNode extends Node {
         this( id, outputPortCount, splitKey , DEFAULT_KEY_HOLDER);
     }
 
-    public SplitNode(JsonNode jsonNode){
-        this(jsonNode.path(NODE_ID).asText(), jsonNode.path(WIRES).size(), jsonNode.path(SPLIT_KEY).asText() , jsonNode.path(KEY_HOLDER).asText());
+    public SplitNode(ObjectNode objectNode){
+        this(objectNode.path(NODE_ID).asText(), objectNode.path(WIRES).size(), objectNode.path(SPLIT_KEY).asText() , objectNode.path(KEY_HOLDER).asText());
     }
 
     @Override

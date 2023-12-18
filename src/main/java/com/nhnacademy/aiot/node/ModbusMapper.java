@@ -4,13 +4,24 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
 import com.nhnacademy.aiot.db.Database;
+
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@EqualsAndHashCode
 public class ModbusMapper extends Node {
 
-    ModbusMapper(String id) {
+    public ModbusMapper(String id) {
         super(id, true, 1);
+    }
+
+    public ModbusMapper(String id, int outputPortCount){
+        super(id, true, outputPortCount);
+    }
+
+    public ModbusMapper(ObjectNode objectNode){
+        this(objectNode.path("id").asText(), objectNode.path("wires").size());
     }
 
 

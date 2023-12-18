@@ -10,9 +10,12 @@ import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.node.Node;
 import com.nhnacademy.aiot.utils.ByteUtils;
 import com.nhnacademy.aiot.utils.JSONUtils;
+
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@EqualsAndHashCode
 public class ModBusReadNode extends Node{
 
     private Socket socket;
@@ -33,6 +36,10 @@ public class ModBusReadNode extends Node{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ModBusReadNode(ObjectNode objectNode){
+        this(objectNode.path("id").asText(), true, objectNode.path("wires").size(), objectNode.path("client").asText(), objectNode.path("address").asInt());
     }
 
     @Override

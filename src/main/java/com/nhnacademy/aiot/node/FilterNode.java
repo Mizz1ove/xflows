@@ -4,12 +4,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.utils.JSONUtils;
+
+import lombok.EqualsAndHashCode;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 import java.util.Map.Entry;
 
+@EqualsAndHashCode
 public class FilterNode extends Node {
 
     private static final String NODE_ID = "id";
@@ -26,9 +30,9 @@ public class FilterNode extends Node {
         }
     }
 
-    public FilterNode(JsonNode jsonNode) {
-        this(jsonNode.path(NODE_ID).asText(), jsonNode.path(WIRES).size(),
-            StreamSupport.stream(jsonNode.path(TARGET_STRINGS).spliterator(), false)
+    public FilterNode(ObjectNode objectNode) {
+        this(objectNode.path(NODE_ID).asText(), objectNode.path(WIRES).size(),
+            StreamSupport.stream(objectNode.path(TARGET_STRINGS).spliterator(), false)
                     .map(JsonNode::asText)
                     .toArray(String[]::new));
     }

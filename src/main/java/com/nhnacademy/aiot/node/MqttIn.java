@@ -5,12 +5,18 @@ import java.util.LinkedList;
 import java.util.Queue;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.FlowGenerator;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.utils.JSONUtils;
+
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@EqualsAndHashCode
 public class MqttIn extends Node {
 
     private String topicFilter;
@@ -22,6 +28,15 @@ public class MqttIn extends Node {
         this.mqttClient = FlowGenerator.clientMap.get(clientId);
         this.topicFilter = topicFilter;
         this.innerQueue = new LinkedList<>();
+    }
+
+    public MqttIn(ObjectNode objectNode){
+        this(
+            objectNode.path("id").asText(), 
+            false,
+            objectNode.path("wires").size(), 
+            objectNode.path("client").asText(),
+            objectNode.path("topic").asText());
     }
 
     @Override

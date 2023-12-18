@@ -6,13 +6,24 @@ import java.util.Objects;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 import com.nhnacademy.aiot.SensorData;
+
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@EqualsAndHashCode
 public class RuleEngine extends Node {
 
-    RuleEngine(String id){
+    public RuleEngine(String id){
         super(id, true, 2);
+    }
+
+    public RuleEngine(String id, int outputPortCount){
+        super(id, true, outputPortCount);
+    }
+
+    public RuleEngine(ObjectNode objectNode){
+        this(objectNode.path("id").asText(), objectNode.path("wires").size());
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.node.Node;
 import com.nhnacademy.aiot.utils.JSONUtils;
+
 import lombok.extern.log4j.Log4j2;
 
 
@@ -42,6 +43,10 @@ public class ModbusServerNode extends Node {
 
     public ModbusServerNode(String id, int outputPortCount) {
         super(id, outputPortCount);
+    }
+
+    public ModbusServerNode(ObjectNode objectNode){
+        this(objectNode.path("id").asText(), objectNode.path("wires").size());
     }
 
     @Override
@@ -121,4 +126,12 @@ public class ModbusServerNode extends Node {
     }
 
 
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof ModbusServerNode){
+            ModbusServerNode other = (ModbusServerNode) o;
+            return this.id.equals(other.id) && this.outputPorts.length == other.outputPorts.length;
+        }
+        return false;
+    }
 }

@@ -1,10 +1,15 @@
 package com.nhnacademy.aiot.node;
 
+import java.util.Arrays;
 import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nhnacademy.aiot.Message;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class GenerateTopicNode extends Node {
 
     private static final String NODE_ID = "id";
@@ -21,11 +26,11 @@ public class GenerateTopicNode extends Node {
         this.fields = fields;
     }
 
-    public GenerateTopicNode(JsonNode jsonNode) {
-        this(jsonNode.path(NODE_ID).asText(),
-                jsonNode.path(WIRES).size(),
-                jsonNode.path(TOPIC_PATTERN).asText(),
-                StreamSupport.stream(jsonNode.path(FIELD).spliterator(), false)
+    public GenerateTopicNode(ObjectNode objectNode) {
+        this(objectNode.path(NODE_ID).asText(),
+                objectNode.path(WIRES).size(),
+                objectNode.path(TOPIC_PATTERN).asText(),
+                StreamSupport.stream(objectNode.path(FIELD).spliterator(), false)
                         .map(JsonNode::asText)
                         .toArray(String[]::new));
     }
@@ -56,5 +61,4 @@ public class GenerateTopicNode extends Node {
         }
         return newTopic;
     }
-
 }
