@@ -76,7 +76,7 @@ public class FlowGeneratorTest {
             " \"nodeType\" : \"SplitNode\", " +
             " \"splitKey\" : \"object\", " +
             " \"keyHolder\" : \"sensorType\", " +
-            " \"wires\" : [[\"splitNode\"]] }");
+            " \"wires\" : [[\"mqttMapper\"]] }");
 
         SplitNode actual = new SplitNode(objectNode);
 
@@ -89,7 +89,7 @@ public class FlowGeneratorTest {
         MqttMapper expected = new MqttMapper("mqttMapper", true, 1);
 
         ObjectNode objectNode = JSONUtils.parseJson("{ \"id\" : \"mqttMapper\" , " +
-            " \"nodeType\" : \"mqttMapper\" ," +
+            " \"nodeType\" : \"MqttMapper\" ," +
             " \"wires\" : [[\"ruleEngine\"]]}");
     
         MqttMapper actual = new MqttMapper(objectNode);

@@ -21,7 +21,6 @@ public class FlowGenerator {
     private static final String NODE_PATH = "com.nhnacademy.aiot.node.";
     private static final String NODE_TYPE = "nodeType";
     private static final String WIRES = "wires";
-    private static final String CLIENT_NODE_ID = "broker";
 
     public static final Map<String, Object> nodeMap = new HashMap<>(); // < nodeId, node instance >
     static final Map<String, Wire> wireMap = new HashMap<>(); // < nodeId, wire instance >
@@ -55,7 +54,6 @@ public class FlowGenerator {
     public void start() {
 
         generateNodes();
-        injectClients();
         generateOutputWires();
         connectWires();
 
@@ -126,32 +124,6 @@ public class FlowGenerator {
             Node targetNode = (Node) nodeMap.get(entry.getKey());
             targetNode.setInputWire(entry.getValue());
         }
-    }
-
-    /*
-     * MqttInNode와 MqttOut노드의 경우, 내부 노드로 클라이언트 노드를 가진다.
-     * 해당 노드들의 클라이언트 인스턴스를 nodeMap에서 찾아서 set해주는 메서드
-     */
-    public void injectClients() {
-
-        for (JsonNode jsonNode : allJsonNodes) {
-
-            String nodeType = jsonNode.path(NODE_TYPE).asText();
-            String nodeId = jsonNode.path(NODE_ID).asText();
-
-            if (nodeType.equals("MqttInNode")) {
-                MqttIn mqttInNode = (MqttIn) nodeMap.get(nodeId);
-                String clientId = jsonNode.path(CLIENT_NODE_ID).asText();
-                //mqttInNode.setClientNode((ClientNode) nodeMap.get(clientId));
-            }
-
-            if (nodeType.equals("MqttOutNode")) {
-                //MqttOutNode mqttOutNode = (MqttOutNode) nodeMap.get(nodeId);
-                String clientId = jsonNode.path(CLIENT_NODE_ID).asText();
-              //  mqttOutNode.setClientNode((ClientNode) nodeMap.get(clientId));
-            }
-        }
-
     }
 
 }

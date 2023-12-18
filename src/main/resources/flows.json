@@ -1,114 +1,82 @@
 [
     {
-        "id" : "1111",
-        "nodeType" : "MqttInNode",
+        "id" : "mqttIn",
+        "nodeType" : "MqttIn",
         "topic" : "application/#",
         "qos" : 1,
-        "broker" : "2222",
+        "client" : "ems",
         "wires" : [
-            ["3333"]
+            ["filterNode"]
         ]
     },
     {
-        "id" : "2222",
-        "nodeType" : "ClientNode",
-        "broker" : "tcp://ems.nhnacademy.com",
-        "port" : 1883,
-        "clientId" : "abc123",
-        "autoConnect": true,
-        "cleansession": true,
-        "keepalive": "60"
-    },
-    {
-        "id" : "3333",
+        "id" : "filterNode",
         "nodeType" : "FilterNode",
-        "targetStrings" : ["devEui", "place", "object", "branch"],
-
+        "targetStrings" : ["devEui", "object"],
         "wires" : [
-            ["4444","20"]
+            ["splitNode"]
         ]
-
     },
     {
-        "id" : "20",
-        "nodeType" : "DebugNode",
-        "wires" : []
-    },
-    {
-        "id" : "4444",
+        "id" : "splitNode",
         "nodeType" : "SplitNode",
         "splitKey" : "object",
         "keyHolder" : "sensorType",
         "wires" : [
-            ["5555","21"]
+            ["mqttMapper"]
         ]
     },
     {
-        "id" : "21",
-        "nodeType" : "DebugNode",
+        "id" : "mqttMapper",
+        "nodeType" : "MqttMapper",
+        "wires" : [
+            ["engine"]
+        ]
+    },
+    {
+        "id" : "modbusServer",
+        "nodeType" : "ModbusServer",
         "wires" : []
     },
     {
-        "id" : "5555",
+        "id" : "engine",
+        "nodeType" : "RuleEngine",
+        "wires" : [
+            ["modbusServer"],
+            ["generateTopic"]
+        ]
+    },
+    {
+        "id" : "generateTopic",
         "nodeType" : "GenerateTopicNode",
         "topicPattern" : "data/d/+/b/+/p/+/e/+",
         "field" : ["devEui", "branch", "place", "sensorType"],
         "wires" : [
-            [ "6666"]
+            ["mqttOut"]
         ]
     },
     {
-        "id" : "6666",
-        "nodeType" : "ReplaceNode",
-        "replaceTargets" : ["humidity", "temperature", "co2", "tvoc"], 
-        "replacement" : "value",
-        "wires" : [
-            [
-                "7777"
-            ]
-        ]
-    },
-    {
-        "id" : "7777",
-        "nodeType" : "SwitchNode",
-        "targetKeySet" : ["devEui", "branch", "place", "sensorType" ,"value"] ,
-        "wires" : [
-            ["8888"]
-        ]
-    },
-    {
-        "id" : "8888",
-        "nodeType" : "FilterNode",
-        "targetStrings" : ["time", "value"],
-        "wires" : [
-            ["9999","10"]
-        ]
-    },
-    
-    {
-        "id" : "9999",
-        "nodeType" : "DebugNode",
-        "wires" : []
-    },
-    {
-        "id" : "10",
+        "id" : "mqttOut",
         "nodeType" : "MqttOutNode",
-        "topic" : "", 
-        "qos" : 2,
-        "broker" : "11",
+        "qos" : 1,
+        "client" : "localhost",
         "wires" : []
-
     },
     {
-        "id" : "11",
-        "nodeType" : "ClientNode",
-        "broker" : "tcp://192.168.71.88",
-        "port" : 1883,
-        "clientId" : "def456",
-        "autoConnect": true,
-        "cleansession": true,
-        "keepalive": "60"
-
+        "id" : "modbusReadNode",
+        "nodeType" : "ModBusReadNode",
+        "client" : "node-red1",
+        "address" : 0,
+        "wires" : [
+            ["modbusMapper"]
+        ]
+    },
+    {
+        "id" : "modbusMapper",
+        "nodeType" : "ModbusMapper",
+        "wires" : [
+            ["engine"]
+        ]
     }
 
 ]
